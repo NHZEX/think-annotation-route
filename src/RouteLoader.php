@@ -40,6 +40,8 @@ class RouteLoader
 
     private array $restfullDefinition;
 
+    private string $routeDumpPath;
+
     public static function getDumpFilePath(string $filename = 'route_storage.dump.php'): string
     {
         $app = App::getInstance();
@@ -60,6 +62,8 @@ class RouteLoader
         $this->app = $app;
 
         $this->config = $this->app->config->get('annotation', $this->config);
+
+        $this->routeDumpPath = $app->config->get('annotation.route_dump_path') ?: $app->getAppPath();
     }
 
     public function registerAnnotation(): void
@@ -85,7 +89,10 @@ class RouteLoader
     public function loadAnnotation(): void
     {
         $rs = new RouteScanning($this->app);
-        foreach ($rs->scan() as $item) {
+
+        $items = ($this->config['static_read'] ?? false) ? $rs->scan() : require $this->routeDumpPath;
+
+        foreach ($items as $item) {
             /** @var string $class */
             $class = $item['class'];
             /** @var string $controllerName */
