@@ -34,6 +34,11 @@ abstract class Base
         return $result;
     }
 
+    public static function __set_state(array $an_array): object
+    {
+        return new static(...$an_array);
+    }
+
     /**
      * Error handler for unknown property accessor in Annotation class.
      *

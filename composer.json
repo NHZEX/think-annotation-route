@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
+        "brick/varexporter": "^0.3.7",
         "doctrine/annotations": "^1.13",
         "symfony/polyfill-php80": "^1.25",
         "topthink/framework": "^6.0.3",
