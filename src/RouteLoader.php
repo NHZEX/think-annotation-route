@@ -13,6 +13,7 @@ use Zxin\Think\Route\Annotation\ResourceRule as ResourceRuleAttr;
 use Zxin\Think\Route\Annotation\Route as RouteAttr;
 use Zxin\Think\Route\Annotation\Middleware as MiddlewareAttr;
 use function array_map;
+use function is_dir;
 use function str_replace;
 use function str_starts_with;
 
@@ -24,6 +25,7 @@ class RouteLoader
 
     private array $config = [
         'restfull_definition' => null,
+        'route_dump_path'     => null,
     ];
 
     const RESTFULL_DEFINITION = [
@@ -37,6 +39,21 @@ class RouteLoader
     ];
 
     private array $restfullDefinition;
+
+    public static function getDumpFilePath(string $filename = 'route_storage.dump.php'): string
+    {
+        $app = App::getInstance();
+        $path = $app->config->get('annotation.route_dump_path') ?: $app->getAppPath();
+
+        $path = str_replace('\\', '/', $path);
+        if (!str_ends_with($path, '/')) {
+            $path .= '/';
+        }
+        if (!is_dir($path)) {
+            throw new \RuntimeException("{$path} does not exist");
+        }
+        return $path . $filename;
+    }
 
     public function __construct(App $app)
     {
