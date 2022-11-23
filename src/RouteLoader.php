@@ -88,6 +88,8 @@ class RouteLoader
 
     public function loadAnnotation(): void
     {
+        // todo 考虑实时转存
+
         $rs = new RouteScanning($this->app);
 
         $items = ($this->config['static_read'] ?? false) ? $rs->scan() : require $this->routeDumpPath;
