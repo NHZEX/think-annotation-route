@@ -74,8 +74,6 @@ class RouteLoader
 
         $this->app->event->listen(RouteLoaded::class, function () {
 
-            //            $dumpData = require __DIR__ . '/route.php';
-
             $this->route = $this->app->route;
 
             $this->restfullDefinition = $this->config['restfull_definition'] ?: self::RESTFULL_DEFINITION;
@@ -86,13 +84,22 @@ class RouteLoader
         });
     }
 
+    public function dataProvider(): array
+    {
+        if ($this->config['static_read'] ?? false) {
+            return require self::getDumpFilePath();
+        } else {
+            $rs = new RouteScanning($this->app);
+
+            return $rs->scan();
+        }
+    }
+
     public function loadAnnotation(): void
     {
         // todo 考虑实时转存
 
-        $rs = new RouteScanning($this->app);
-
-        $items = ($this->config['static_read'] ?? false) ? $rs->scan() : require $this->routeDumpPath;
+        $items = $this->dataProvider();
 
         foreach ($items as $item) {
             /** @var string $class */
