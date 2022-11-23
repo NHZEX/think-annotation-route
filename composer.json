@@ -1,0 +1,55 @@
+{
+    "name": "zxin/think-route",
+    "description": "think auth",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "auooru",
+            "email": "auooru@outlook.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "doctrine/annotations": "^1.13",
+        "symfony/polyfill-php80": "^1.25",
+        "topthink/framework": "^6.0.3",
+        "zxin/think-annotation": "^1.0.3",
+        "zxin/utils": "^2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8|^9"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Zxin\\Think\\Route\\": "src/"
+        },
+        "files": [
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Zxin\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/dump-route"
+    ],
+    "extra": {
+        "think": {
+            "services": [
+            ],
+            "config": {
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": false
+    },
+    "minimum-stability": "stable",
+    "repositories": [
+    ]
+}
