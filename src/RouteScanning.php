@@ -137,6 +137,8 @@ class RouteScanning
                     $refMethod->getAttributes(MiddlewareAttr::class, \ReflectionAttribute::IS_INSTANCEOF),
                 );
 
+                usort($route, fn ($a, $b) => $b->registerSort <=> $a->registerSort);
+
                 $groupItem['routeItems'][] = [
                     'method'     => $refMethod->getName(),
                     'route'      => $route,
@@ -144,5 +146,9 @@ class RouteScanning
                 ];
             }
         }
+
+        $routeItems = &$groupItem['routeItems'];
+
+        usort($routeItems, fn ($a, $b) => $b['route'][0]->registerSort <=> $a['route'][0]->registerSort);
     }
 }

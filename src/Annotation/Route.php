@@ -39,8 +39,11 @@ final class Route extends Base
         public ?array            $filter = null,
         public ?array            $append = null,
         public ?array            $pattern = null,
+        // ==== 特殊参数 ====
         // 单独设置路由到特定组
         public ?string           $setGroup = null,
+        // 设置路由注册顺序
+        public int               $registerSort = 1000,
     ) {
     }
 }
