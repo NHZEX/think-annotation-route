@@ -16,6 +16,8 @@ use Doctrine\Common\Annotations\Annotation\Target;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class Route extends Base
 {
+    use TOptions;
+
     public function __construct(
         public ?string           $name = null,
         /**

@@ -15,6 +15,8 @@ use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 final class Group extends Base
 {
+    use TOptions;
+
     public function __construct(
         public ?string           $name = null,
         public null|string|array $middleware = null,

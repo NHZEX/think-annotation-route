@@ -7,33 +7,6 @@ use function sprintf;
 
 abstract class Base
 {
-    public function getOptions(): array
-    {
-        $result = [];
-        foreach (
-            [
-                'middleware',
-                'ext',
-                'deny_ext',
-                'https',
-                'domain',
-                'complete_match',
-                'cache',
-                'ajax',
-                'pjax',
-                'json',
-                'filter',
-                'append',
-            ] as $name
-        ) {
-            if (!isset($this->$name)) {
-                continue;
-            }
-            $result[] = $this->$name;
-        }
-        return $result;
-    }
-
     public static function __set_state(array $an_array): object
     {
         return new static(...$an_array);

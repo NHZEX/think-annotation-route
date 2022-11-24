@@ -16,6 +16,8 @@ use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 final class Resource extends Base
 {
+    use TOptions;
+
     public function __construct(
         public string            $name,
         // 定义资源变量名
