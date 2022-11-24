@@ -90,7 +90,7 @@ class RouteLoader
 
     public function dataProvider(): array
     {
-        if ($this->config['only_load_dump'] ?? false) {
+        if ($this->config['route']['only_load_dump'] ?? false) {
             $filename = $this->routeDumpFilename;
 
             $this->app->log->debug("load route dump, {$filename}");
@@ -103,7 +103,9 @@ class RouteLoader
 
             $items = $rs->scan();
 
-            if ($this->config['real_time_dump']) {
+            if ($this->config['route']['real_time_dump'] ?? false) {
+                $this->app->log->debug("route real time dump");
+
                 $dump = new RouteDump($this->routeDumpFilename);
                 $dump->saveData($items);
             }
