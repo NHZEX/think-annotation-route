@@ -6,6 +6,7 @@ use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
 use Doctrine\Common\Annotations\Annotation\Target;
+use Attribute;
 
 /**
  * 注册路由
@@ -13,7 +14,7 @@ use Doctrine\Common\Annotations\Annotation\Target;
  * @Target({"METHOD","CLASS"})
  * @NamedArgumentConstructor
  */
-#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Route extends Base
 {
     use TOptions;

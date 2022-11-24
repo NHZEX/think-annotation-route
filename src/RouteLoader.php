@@ -1,9 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zxin\Think\Route;
 
-use ReflectionClass;
 use think\App;
 use think\event\RouteLoaded;
 use think\Route;
@@ -12,10 +12,7 @@ use Zxin\Think\Route\Annotation\Resource as ResourceAttr;
 use Zxin\Think\Route\Annotation\ResourceRule as ResourceRuleAttr;
 use Zxin\Think\Route\Annotation\Route as RouteAttr;
 use Zxin\Think\Route\Annotation\Middleware as MiddlewareAttr;
-use function array_map;
-use function is_dir;
-use function str_replace;
-use function str_starts_with;
+use RuntimeException;
 
 class RouteLoader
 {
@@ -32,7 +29,7 @@ class RouteLoader
         ],
     ];
 
-    const RESTFULL_DEFINITION = [
+    public const RESTFULL_DEFINITION = [
         'index'  => ['get', '', 'index'],
         'select' => ['get', '/select', 'select'],
         'read'   => ['get', '/<id>', 'read'],
@@ -51,12 +48,12 @@ class RouteLoader
         $app = App::getInstance();
         $path = $app->config->get('annotation.route.dump_path') ?: $app->getAppPath();
 
-        $path = str_replace('\\', '/', $path);
+        $path = \str_replace('\\', '/', $path);
         if (!str_ends_with($path, '/')) {
             $path .= '/';
         }
-        if (!is_dir($path)) {
-            throw new \RuntimeException("{$path} does not exist");
+        if (!\is_dir($path)) {
+            throw new RuntimeException("{$path} does not exist");
         }
         return $path . $filename;
     }
@@ -77,7 +74,6 @@ class RouteLoader
         }
 
         $this->app->event->listen(RouteLoaded::class, function () {
-
             $this->route = $this->app->route;
 
             $this->restfullDefinition = $this->config['restfull_definition'] ?: self::RESTFULL_DEFINITION;
@@ -138,7 +134,6 @@ class RouteLoader
 
             if ($resourceAttr) {
                 $groupCallback = function () use ($class, $controllerName, $resourceAttr, $resourceItems) {
-
                     // 支持解析扩展资源路由
                     $items = [];
                     foreach ($resourceItems as $item) {
@@ -198,7 +193,7 @@ class RouteLoader
                     //注册路由
                     $nodeName = $routeAttr->name ?: $methodName;
 
-                    if (str_starts_with($nodeName, '/')) {
+                    if (\str_starts_with($nodeName, '/')) {
                         // 根路径
                         $rule = $this->route->rule($nodeName, "{$controllerName}/{$methodName}", $routeAttr->method);
                     } else {

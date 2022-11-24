@@ -11,10 +11,8 @@ use Zxin\Think\Route\Annotation\Resource as ResourceAttr;
 use Zxin\Think\Route\Annotation\ResourceRule as ResourceRuleAttr;
 use Zxin\Think\Route\Annotation\Route as RouteAttr;
 use Zxin\Think\Route\Annotation\Middleware as MiddlewareAttr;
-use function array_map;
-use function str_replace;
-use function str_starts_with;
-use function usort;
+use ReflectionMethod;
+use ReflectionAttribute;
 
 class RouteScanning
 {
@@ -30,8 +28,8 @@ class RouteScanning
 
     public function classToRouteName(string $class): string
     {
-        $controllerName = str_replace("app\\{$this->controllerLayer}\\", '', $class);
-        return str_replace('\\', '.', $controllerName);
+        $controllerName = \str_replace("app\\{$this->controllerLayer}\\", '', $class);
+        return \str_replace('\\', '.', $controllerName);
     }
 
     public function scan(): array
@@ -52,7 +50,7 @@ class RouteScanning
                 continue;
             }
 
-            $attr = $refClass->getAttributes(GroupAttr::class, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
+            $attr = $refClass->getAttributes(GroupAttr::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
             /** @var GroupAttr|null $groupAttr */
             $groupAttr = $attr?->newInstance();
 
@@ -61,12 +59,12 @@ class RouteScanning
             $refMap[$class] = $refClass;
 
             /** @var MiddlewareAttr[] $middlewareAttr */
-            $middlewareAttr = array_map(
-                fn($attr) => $attr->newInstance(),
-                $refClass->getAttributes(MiddlewareAttr::class, \ReflectionAttribute::IS_INSTANCEOF)
+            $middlewareAttr = \array_map(
+                fn ($attr) => $attr->newInstance(),
+                $refClass->getAttributes(MiddlewareAttr::class, ReflectionAttribute::IS_INSTANCEOF)
             );
 
-            $attr = $refClass->getAttributes(ResourceAttr::class, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
+            $attr = $refClass->getAttributes(ResourceAttr::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
             /** @var ResourceAttr|null $groupAttr */
             $resourceAttr = $attr?->newInstance();
 
@@ -83,7 +81,7 @@ class RouteScanning
             ];
         }
 
-        usort($items, fn($a, $b) => $b['sort'] <=> $a['sort']);
+        \usort($items, fn ($a, $b) => $b['sort'] <=> $a['sort']);
 
 
         foreach ($items as &$item) {
@@ -103,17 +101,17 @@ class RouteScanning
         // todo 支持排序
 
         // 资源路由
-        foreach ($refClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $refMethod) {
+        foreach ($refClass->getMethods(ReflectionMethod::IS_PUBLIC) as $refMethod) {
             $methodName = $refMethod->getName();
 
             if (!$refMethod->isPublic() || $refMethod->isStatic()) {
                 continue;
             }
-            if (str_starts_with($methodName, '_')) {
+            if (\str_starts_with($methodName, '_')) {
                 continue;
             }
 
-            $attr = $refMethod->getAttributes(ResourceRuleAttr::class, \ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
+            $attr = $refMethod->getAttributes(ResourceRuleAttr::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
             /** @var ResourceRuleAttr $rrule */
             $rrule = $attr?->newInstance();
 
@@ -125,19 +123,19 @@ class RouteScanning
             }
 
             /** @var RouteAttr[] $route */
-            $route = array_map(
-                fn($attr) => $attr->newInstance(),
-                $refMethod->getAttributes(RouteAttr::class, \ReflectionAttribute::IS_INSTANCEOF),
+            $route = \array_map(
+                fn ($attr) => $attr->newInstance(),
+                $refMethod->getAttributes(RouteAttr::class, ReflectionAttribute::IS_INSTANCEOF),
             );
 
             if ($route) {
                 /** @var MiddlewareAttr[] $middleware */
-                $middleware = array_map(
-                    fn($attr) => $attr->newInstance(),
-                    $refMethod->getAttributes(MiddlewareAttr::class, \ReflectionAttribute::IS_INSTANCEOF),
+                $middleware = \array_map(
+                    fn ($attr) => $attr->newInstance(),
+                    $refMethod->getAttributes(MiddlewareAttr::class, ReflectionAttribute::IS_INSTANCEOF),
                 );
 
-                usort($route, fn ($a, $b) => $b->registerSort <=> $a->registerSort);
+                \usort($route, fn ($a, $b) => $b->registerSort <=> $a->registerSort);
 
                 $groupItem['routeItems'][] = [
                     'method'     => $refMethod->getName(),
@@ -149,6 +147,6 @@ class RouteScanning
 
         $routeItems = &$groupItem['routeItems'];
 
-        usort($routeItems, fn ($a, $b) => $b['route'][0]->registerSort <=> $a['route'][0]->registerSort);
+        \usort($routeItems, fn ($a, $b) => $b['route'][0]->registerSort <=> $a['route'][0]->registerSort);
     }
 }

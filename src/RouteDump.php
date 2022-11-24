@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zxin\Think\Route;
@@ -30,7 +31,7 @@ class RouteDump extends DumpValue
 
     public function scanAnnotation(): void
     {
-        $rs    = new RouteScanning(app());
+        $rs    = new RouteScanning(\app());
         $items = $rs->scan();
 
         $this->load();
