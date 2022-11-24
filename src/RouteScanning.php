@@ -100,6 +100,8 @@ class RouteScanning
      */
     public function parseMethod(array &$groupItem, ReflectionClass $refClass): void
     {
+        // todo 支持排序
+
         // 资源路由
         foreach ($refClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $refMethod) {
             $methodName = $refMethod->getName();

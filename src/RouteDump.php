@@ -22,6 +22,12 @@ class RouteDump extends DumpValue
         return VarExporter::export($data);
     }
 
+    public function saveData(array $items)
+    {
+        $this->load();
+        $this->save($items);
+    }
+
     public function scanAnnotation(): void
     {
         $rs    = new RouteScanning(app());
