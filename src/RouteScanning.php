@@ -112,7 +112,7 @@ class RouteScanning
             }
 
             $attr = $refMethod->getAttributes(ResourceRuleAttr::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
-            /** @var ResourceRuleAttr $rrule */
+            /** @var ResourceRuleAttr|null $rrule */
             $rrule = $attr?->newInstance();
 
             if ($rrule) {

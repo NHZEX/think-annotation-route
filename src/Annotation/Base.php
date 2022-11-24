@@ -9,6 +9,7 @@ abstract class Base
 {
     public static function __set_state(array $an_array): object
     {
+        /** @phpstan-ignore-next-line self 也不能避免参数被改变 */
         return new static(...$an_array);
     }
 

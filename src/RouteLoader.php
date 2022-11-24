@@ -119,7 +119,7 @@ class RouteLoader
             $class = $item['class'];
             /** @var string $controllerName */
             $controllerName = $item['controller'];
-            /** @var GroupAttr $groupAttr */
+            /** @var GroupAttr|null $groupAttr */
             $groupAttr = $item['group'];
             /** @var array<MiddlewareAttr> $middlewareAttr */
             $middlewareAttr = $item['middleware'];
@@ -133,7 +133,7 @@ class RouteLoader
             $groupCallback = null;
 
             if ($resourceAttr) {
-                $groupCallback = function () use ($class, $controllerName, $resourceAttr, $resourceItems) {
+                $groupCallback = function () use ($controllerName, $resourceAttr, $resourceItems) {
                     // 支持解析扩展资源路由
                     $items = [];
                     foreach ($resourceItems as $item) {

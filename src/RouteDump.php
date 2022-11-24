@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Zxin\Think\Route;
 
 use Brick\VarExporter\VarExporter;
+use think\App;
 use Zxin\Think\Annotation\DumpValue;
-use function app;
 
 class RouteDump extends DumpValue
 {
@@ -31,7 +31,7 @@ class RouteDump extends DumpValue
 
     public function scanAnnotation(): void
     {
-        $rs    = new RouteScanning(\app());
+        $rs    = new RouteScanning(App::getInstance());
         $items = $rs->scan();
 
         $this->load();
