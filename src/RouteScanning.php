@@ -34,6 +34,7 @@ class RouteScanning
 
     public function scan(): array
     {
+        $cutPathLen = \strlen($this->app->getRootPath());
         $scanning = new Scanning($this->app);
 
         $items = [];
@@ -43,7 +44,7 @@ class RouteScanning
         foreach ($scanning->scanningClass() as $file => $class) {
             try {
                 $refClass = new ReflectionClass($class);
-            } catch (ReflectionException) {
+            } catch (ReflectionException $ex) {
                 continue;
             }
             if ($refClass->isAbstract() || $refClass->isTrait()) {
@@ -52,7 +53,7 @@ class RouteScanning
 
             $attr = $refClass->getAttributes(GroupAttr::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
             /** @var GroupAttr|null $groupAttr */
-            $groupAttr = $attr?->newInstance();
+            $groupAttr = $attr ? $attr->newInstance() : null;
 
             $sort = $groupAttr ? $groupAttr->registerSort : 1000;
 
@@ -66,10 +67,12 @@ class RouteScanning
 
             $attr = $refClass->getAttributes(ResourceAttr::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
             /** @var ResourceAttr|null $groupAttr */
-            $resourceAttr = $attr?->newInstance();
+            $resourceAttr = $attr ? $attr->newInstance() : null;
 
+            $filename = (string) $file;
+            $filename = \substr($filename, $cutPathLen);
             $items[] = [
-                'file'          => (string) $file,
+                'file'          => $filename,
                 'class'         => $class,
                 'controller'    => $this->classToRouteName($class),
                 'sort'          => $sort,
@@ -113,7 +116,7 @@ class RouteScanning
 
             $attr = $refMethod->getAttributes(ResourceRuleAttr::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
             /** @var ResourceRuleAttr|null $rrule */
-            $rrule = $attr?->newInstance();
+            $rrule = $attr ? $attr->newInstance() : null;
 
             if ($rrule) {
                 $groupItem['resourceItems'][] = [
