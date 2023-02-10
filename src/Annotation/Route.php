@@ -2,17 +2,10 @@
 
 namespace Zxin\Think\Route\Annotation;
 
-use Doctrine\Common\Annotations\Annotation;
-use Doctrine\Common\Annotations\Annotation\Enum;
-use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
-use Doctrine\Common\Annotations\Annotation\Target;
 use Attribute;
 
 /**
  * 注册路由
- * @Annotation
- * @Target({"METHOD","CLASS"})
- * @NamedArgumentConstructor
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Route extends Base
@@ -23,7 +16,7 @@ final class Route extends Base
         public ?string           $name = null,
         /**
          * 请求类型
-         * @Enum({"GET","POST","PUT","DELETE","PATCH","OPTIONS","HEAD"})
+         * "GET","POST","PUT","DELETE","PATCH","OPTIONS","HEAD"
          */
         public string            $method = "*",
         public null|string|array $middleware = null,

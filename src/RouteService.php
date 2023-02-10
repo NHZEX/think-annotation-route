@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zxin\Think\Route;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use think\Service;
 
 class RouteService extends Service
@@ -16,7 +15,6 @@ class RouteService extends Service
 
     public function register()
     {
-        AnnotationRegistry::registerLoader('class_exists');
     }
 
     public function boot()

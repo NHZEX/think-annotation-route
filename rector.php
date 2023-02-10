@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\Set\ValueObject\LevelSetList;
+use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -22,7 +23,9 @@ return static function (RectorConfig $rectorConfig): void {
 
     // define sets of rules
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_74,
+        SetList::DEAD_CODE,
+        SetList::CODE_QUALITY,
+        LevelSetList::UP_TO_PHP_80,
     ]);
 
     $rectorConfig->phpstanConfig(__DIR__ . '/phpstan.neon');

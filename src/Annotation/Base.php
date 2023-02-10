@@ -3,7 +3,6 @@
 namespace Zxin\Think\Route\Annotation;
 
 use BadMethodCallException;
-use function sprintf;
 
 abstract class Base
 {
