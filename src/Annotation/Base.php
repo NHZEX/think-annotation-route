@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zxin\Think\Route\Annotation;
 
 use BadMethodCallException;
@@ -22,7 +24,7 @@ abstract class Base
     public function __get($name)
     {
         throw new BadMethodCallException(
-            \sprintf("Unknown property '%s' on annotation '%s'.", $name, static::class)
+            sprintf("Unknown property '%s' on annotation '%s'.", $name, static::class)
         );
     }
 
@@ -34,10 +36,10 @@ abstract class Base
      *
      * @throws BadMethodCallException
      */
-    public function __set($name, $value)
+    public function __set($name, mixed $value)
     {
         throw new BadMethodCallException(
-            \sprintf("Unknown property '%s' on annotation '%s'.", $name, static::class)
+            sprintf("Unknown property '%s' on annotation '%s'.", $name, static::class)
         );
     }
 }

@@ -16,8 +16,6 @@ use RuntimeException;
 
 class RouteLoader
 {
-    private App $app;
-
     protected Route $route;
 
     private array $config = [
@@ -48,20 +46,18 @@ class RouteLoader
         $app = App::getInstance();
         $path = $app->config->get('annotation.route.dump_path') ?: $app->getAppPath();
 
-        $path = \str_replace('\\', '/', $path);
+        $path = str_replace('\\', '/', $path);
         if (!str_ends_with($path, '/')) {
             $path .= '/';
         }
-        if (!\is_dir($path)) {
+        if (!is_dir($path)) {
             throw new RuntimeException("{$path} does not exist");
         }
         return $path . $filename;
     }
 
-    public function __construct(App $app)
+    public function __construct(private App $app)
     {
-        $this->app = $app;
-
         $this->config = $this->app->config->get('annotation', $this->config);
 
         $this->routeDumpFilename = self::getDumpFilePath();
@@ -115,8 +111,6 @@ class RouteLoader
         $items = $this->dataProvider();
 
         foreach ($items as $item) {
-            /** @var string $class */
-            $class = $item['class'];
             /** @var string $controllerName */
             $controllerName = $item['controller'];
             /** @var GroupAttr|null $groupAttr */
@@ -132,7 +126,7 @@ class RouteLoader
 
             $groupCallback = null;
 
-            if ($resourceAttr) {
+            if ($resourceAttr !== null) {
                 $groupCallback = function () use ($controllerName, $resourceAttr, $resourceItems) {
                     // 支持解析扩展资源路由
                     $items = [];
@@ -174,13 +168,9 @@ class RouteLoader
                 $groupCallback && $groupCallback();
                 $routeGroup = $this->route->getGroup();
             }
-            if ($middlewareAttr) {
-                foreach ($middlewareAttr as $attr) {
-                    $routeGroup->middleware($attr->name, ...$attr->params);
-                }
+            foreach ($middlewareAttr as $attr) {
+                $routeGroup->middleware($attr->name, ...$attr->params);
             }
-
-            $groupCallback = null;
 
             foreach ($routeItems as $routeItem) {
                 $methodName = $routeItem['method'];
@@ -193,7 +183,7 @@ class RouteLoader
                     //注册路由
                     $nodeName = $routeAttr->name ?: $methodName;
 
-                    if (\str_starts_with($nodeName, '/')) {
+                    if (str_starts_with($nodeName, '/')) {
                         // 根路径
                         $rule = $this->route->rule($nodeName, "{$controllerName}/{$methodName}", $routeAttr->method);
                     } else {

@@ -24,6 +24,9 @@
     },
     "suggest": {
     },
+    "replace": {
+        "symfony/polyfill-php80": "*"
+    },
     "autoload": {
         "psr-4": {
             "Zxin\\Think\\Route\\": "src/"
